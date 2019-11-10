@@ -6,9 +6,23 @@
     </head>
     <body>
 
-        <h1>My First Heading</h1>
+        <h1>Создание листа</h1>
+        <p>Для добавления признака введите название и количество градаций</p>
+        <div>
+            <label for="#name">Название</label>
+            <input id="name" type="text">
+        </div>
+        <div style="margin-top: 20px">
+            <label for="#name">Количество уровней</label>
+            <input id="levls-count" type="text">
+        </div>
+        <div style="margin-top: 20px">
+                <label for="#name">Вес</label>
+                <input id="weight" type="text">
+            </div>
+        <button onclick="addInputsForLevels()" style="margin-top: 20px">Добавить признак</button>
+        <div id="level-inputs">
 
-        <p>My first paragraph.</p>
-
+        </div>
     </body>
 </html>
