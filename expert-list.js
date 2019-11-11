@@ -47,7 +47,7 @@ function showListUsing() {
 
 function createFeatureValueSelect(feature) {
     let levelSelect = document.createElement("select");
-    levelSelect.setAttribute("id", feature.id + "featureName");
+    levelSelect.setAttribute("id", feature.id + "featureValue");
 
     feature.levels.forEach((element, index) => {
         let option = document.createElement("option");
@@ -78,9 +78,56 @@ function createList() {
     hideListCreation();
     showListUsing();
     getNormalizingCoef(features);
-    setFeaturesParams(features);
+    features = setFeaturesParams(features);
     createFeatureValueBlock(features);
 }
+
+function setFeaturesValues(features) {
+    features.forEach((feature) => {
+        feature.value = findValueForFeature(feature.id);
+    });
+}
+
+function calculateFeaturesSum(features) {
+    result = features.reduce(
+        function (sum, feature) {
+            console.log(feature.isPositive());
+            if (feature.isPositive()) {
+                return sum + feature.value;
+            } else {
+                return sum - feature.value;  
+            }
+        },
+        0
+    );
+    console.log(result);
+    return result;
+}
+
+function calculateTotal(featuresSum) {
+    return featuresSum;
+}
+
+function showResult(result) {
+    let listBlock = document.getElementById('list-using');
+    let totalValue = document.createElement("h4");
+    totalValue.appendChild(document.createTextNode("Общая оценка: " + result + "%"));
+    listBlock.appendChild(totalValue);
+}
+function calculateResult() {
+    setFeaturesValues(features);
+    showResult(
+        calculateTotal(
+            calculateFeaturesSum(features)
+        )
+    );
+}
+
+function findValueForFeature(featureNuber) {
+    let selectId = featureNuber + "featureValue";
+    return Number(document.getElementById(selectId).value);
+}
+
 function findLevelInputValueForFeature(featureNuber, levelNumber) {
     let inputId = featureNuber + "featureName" + levelNumber;
     return document.getElementById(inputId).value
@@ -128,6 +175,9 @@ function createFeature(featureId, featureName, featureWeight, featureType, level
                 this.setFeatureLevel(levelName);
             }
             return this;
+        },
+        isPositive() {
+            return this.type === "true";
         },
         getLevelValue(levelNumber) {
             return levelNumber * this.levelUnit;
