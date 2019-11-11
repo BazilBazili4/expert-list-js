@@ -16,9 +16,21 @@ function addInputsForLevels() {
 
     for (i = 0; i < count; i++) {
         let levelInput = document.createElement("input");
-        levelInput.setAttribute("id", "levelInput" + i);
+        levelInput.setAttribute("id", "featureName" + i);
+        levelInput.setAttribute("class", "levelInput");
+
         feature.appendChild(levelInput);     
     }
+    console.log(document.querySelectorAll( ".levelInput" ));
     container.appendChild(feature);     
+}
 
+function hideListCreation() {
+    let listCreationDiv = document.getElementById('list-creation');
+    listCreationDiv.setAttribute("style", "display: none");
+}
+
+function showListUsing() {
+    let listUsingDiv = document.getElementById('list-using');
+    listUsingDiv.setAttribute("style", "display: block");
 }

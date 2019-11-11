@@ -5,24 +5,32 @@
         <script type="text/javascript" src="expert-list.js"></script>
     </head>
     <body>
-
-        <h1>Создание листа</h1>
-        <p>Для добавления признака введите название и количество градаций</p>
-        <div>
-            <label for="#name">Название</label>
-            <input id="feature-name" type="text">
-        </div>
-        <div style="margin-top: 20px">
-            <label for="#name">Количество уровней</label>
-            <input id="levels-count" type="text">
-        </div>
-        <div style="margin-top: 20px">
-                <label for="#name">Вес</label>
-                <input id="feature-weight" type="text">
+        <div id="list-creation">
+            <h1>Создание листа</h1>
+            <p>Для добавления признака введите название и количество градаций</p>
+            <div>
+                <label for="#name">Название</label>
+                <input id="feature-name" type="text">
             </div>
-        <button onclick="addInputsForLevels()" style="margin-top: 20px">Добавить признак</button>
-        <div style="margin-top: 20px" id="level-inputs">
+            <div style="margin-top: 20px">
+                <label for="#name">Количество уровней</label>
+                <input id="levels-count" type="text">
+            </div>
+            <div style="margin-top: 20px">
+                    <label for="#name">Вес</label>
+                    <input id="feature-weight" type="text">
+                </div>
+            <button onclick="addInputsForLevels()" style="margin-top: 20px">Добавить признак</button>
+            <div style="margin-top: 20px" id="level-inputs">
+    
+            </div>
+            <div style="margin-top: 20px">
+                <button onclick="hideListCreation()" style="margin-top: 20px">Готово</button>
+            </div>
+        </div>
+        <div id="list-using" style="display: none">
 
         </div>
+
     </body>
 </html>
