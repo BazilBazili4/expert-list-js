@@ -49,10 +49,13 @@ function showListUsing() {
     listUsingDiv.setAttribute("style", "display: block");
 }
 
+
 function createList() {
     hideListCreation();
     showListUsing();
     console.log(setFeaturesParams(features));
+    console.log(getNormalizingCoef(features));
+
 }
 function findLevelInputValueForFeature(featureNuber, levelNumber) {
     let inputId = featureNuber + "featureName" + levelNumber;
@@ -111,4 +114,14 @@ function createFeature(featureId, featureName, featureWeight, featureType, level
 
 function calcNormalizingCoef(weightSum) {
     return 100 / weightSum;
+}
+
+function getNormalizingCoef(features) {
+    weightSum = features.reduce(
+        function (accumulator, currentValue) {
+            return accumulator + currentValue.weight;
+        },
+        0
+    );
+    return calcNormalizingCoef(weightSum);
 }
