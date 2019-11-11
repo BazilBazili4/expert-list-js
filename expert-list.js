@@ -31,11 +31,7 @@ function addInputsForLevels() {
     featureCount += 1;
 
     console.log(features);
-    // features.map(
-    //     function(feature) {
-    //         feature.
-    //     }
-    // );
+
     container.appendChild(feature);     
 }
 
@@ -49,13 +45,41 @@ function showListUsing() {
     listUsingDiv.setAttribute("style", "display: block");
 }
 
+function createFeatureValueSelect(feature) {
+    let levelSelect = document.createElement("select");
+    levelSelect.setAttribute("id", feature.id + "featureName");
 
+    feature.levels.forEach((element, index) => {
+        let option = document.createElement("option");
+        console.log(element);
+        option.value = feature.getLevelValue(index);
+        option.text = element;
+        levelSelect.appendChild(option);
+        console.log(option);
+
+    });
+
+    return levelSelect;
+}
+
+function createFeatureValueBlock(features) {
+    let listBlock = document.getElementById('list-using');
+
+    features.forEach((element) => {
+        let selectDiv = document.createElement("div");
+        let featureName = document.createElement("h3");
+        featureName.appendChild(document.createTextNode(element.name));
+        selectDiv.appendChild(featureName);
+        selectDiv.appendChild(createFeatureValueSelect(element));
+        listBlock.appendChild(selectDiv);
+    });
+}
 function createList() {
     hideListCreation();
     showListUsing();
-    console.log(setFeaturesParams(features));
-    console.log(getNormalizingCoef(features));
-
+    getNormalizingCoef(features);
+    setFeaturesParams(features);
+    createFeatureValueBlock(features);
 }
 function findLevelInputValueForFeature(featureNuber, levelNumber) {
     let inputId = featureNuber + "featureName" + levelNumber;
@@ -65,7 +89,7 @@ function findLevelInputValueForFeature(featureNuber, levelNumber) {
 
 function setFeaturesParams(features) {
     featuresCount = features.length;
-    normalizingCoef = 1;
+    normalizingCoef = getNormalizingCoef(features);
     updatedFeatures = features.map(
         function (feature) {
             return feature.setFeatureRank(normalizingCoef).setLevelUnit().setLevels(findLevelInputValueForFeature);
