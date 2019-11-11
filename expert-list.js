@@ -27,7 +27,7 @@ function addInputsForLevels() {
         levelInput.required = true;
         feature.appendChild(levelInput);   
     }
-    features.push(createFeature(featureCount, featureName, featureWeight, featureType));
+    features.push(createFeature(featureCount, featureName, featureWeight, featureType, count));
     featureCount += 1;
 
     console.log(features);
@@ -49,23 +49,57 @@ function showListUsing() {
     listUsingDiv.setAttribute("style", "display: block");
 }
 
-function createFeature(featureId, featureName, featureWeight, featureType) {
+function createList() {
+    hideListCreation();
+    showListUsing();
+    console.log(setFeaturesParams(features));
+}
+function findLevelInputValueForFeature(featureNuber, levelNumber) {
+    let inputId = featureNuber + "featureName" + levelNumber;
+    return document.getElementById(inputId).value
+}
+
+
+function setFeaturesParams(features) {
+    featuresCount = features.length;
+    normalizingCoef = 1;
+    updatedFeatures = features.map(
+        function (feature) {
+            return feature.setFeatureRank(normalizingCoef).setLevelUnit().setLevels(findLevelInputValueForFeature);
+        }
+    );
+    return updatedFeatures;
+}
+
+function createFeature(featureId, featureName, featureWeight, featureType, levelCount) {
     let feature = {
         id: featureId,
         name: featureName,
-        weight: featureWeight,
+        weight: Number(featureWeight),
         type: featureType,
         featureRank: 0,
         levelUnit: 0,
         levelValue: 0,
+        levelsCount: Number(levelCount),
         levels: [],
         value: 0,
         setFeatureRank(normalizingCoef) {
-            this.featureRank = normalizingCoef * this.featureWeight;
+            this.featureRank = normalizingCoef * this.weight;
             return this;
         },
         setLevelUnit() {
-            this.levelUnit = this.featureRank / (this.levels.length);
+            this.levelUnit = this.featureRank / (this.levelsCount);
+            return this;
+        },
+        setFeatureLevel(levelName) {
+            this.levels.push(levelName);
+            return this;
+        },
+        setLevels(findLevelName) {
+            for (i = 0; i < this.levelsCount; i++) {
+                levelName = findLevelName(featureId, i);
+                this.setFeatureLevel(levelName);
+            }
             return this;
         },
         getLevelValue(levelNumber) {
@@ -75,6 +109,6 @@ function createFeature(featureId, featureName, featureWeight, featureType) {
     return feature;
 }
 
-function getNormalizingCoef(weightSum) {
+function calcNormalizingCoef(weightSum) {
     return 100 / weightSum;
 }
