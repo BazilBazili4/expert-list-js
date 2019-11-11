@@ -31,6 +31,11 @@ function addInputsForLevels() {
     featureCount += 1;
 
     console.log(features);
+    // features.map(
+    //     function(feature) {
+    //         feature.
+    //     }
+    // );
     container.appendChild(feature);     
 }
 
@@ -50,20 +55,26 @@ function createFeature(featureId, featureName, featureWeight, featureType) {
         name: featureName,
         weight: featureWeight,
         type: featureType,
+        featureRank: 0,
+        levelUnit: 0,
+        levelValue: 0,
         levels: [],
-        value: 0
+        value: 0,
+        setFeatureRank(normalizingCoef) {
+            this.featureRank = normalizingCoef * this.featureWeight;
+            return this;
+        },
+        setLevelUnit() {
+            this.levelUnit = this.featureRank / (this.levels.length);
+            return this;
+        },
+        getLevelValue(levelNumber) {
+            return levelNumber * this.levelUnit;
+        }
     };
     return feature;
 }
 
-function normalizingCoef(weightSum) {
+function getNormalizingCoef(weightSum) {
     return 100 / weightSum;
-}
-
-function featureRank(normalizingCoef, featureWeight) {
-    return normalizingCoef * featureWeight;
-}
-
-function levelUnit(featureRank, levelsCount) {
-    return featureRank / (featureCount - 1);
 }
