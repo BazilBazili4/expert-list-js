@@ -30,8 +30,6 @@ function addInputsForLevels() {
     features.push(createFeature(featureCount, featureName, featureWeight, featureType, count));
     featureCount += 1;
 
-    console.log(features);
-
     container.appendChild(feature);     
 }
 
@@ -51,12 +49,9 @@ function createFeatureValueSelect(feature) {
 
     feature.levels.forEach((element, index) => {
         let option = document.createElement("option");
-        console.log(element);
         option.value = feature.getLevelValue(index);
         option.text = element;
         levelSelect.appendChild(option);
-        console.log(option);
-
     });
 
     return levelSelect;
@@ -77,8 +72,13 @@ function createFeatureValueBlock(features) {
 function createList() {
     hideListCreation();
     showListUsing();
-    // getNormalizingCoef(features);
-    // features = setFeaturesParams(features);
+    setFeaturesParams(features);
+    createFeatureValueBlock(features);
+}
+function createListFromFile(features) {
+    hideListCreation();
+    showListUsing();
+    // setFeaturesParams(features);
     createFeatureValueBlock(features);
 }
 
@@ -91,7 +91,6 @@ function setFeaturesValues(features) {
 function calculateFeaturesSum(features) {
     result = features.reduce(
         function (sum, feature) {
-            console.log(feature.isPositive());
             if (feature.isPositive()) {
                 return sum + feature.value;
             } else {
@@ -100,7 +99,6 @@ function calculateFeaturesSum(features) {
         },
         0
     );
-    console.log(result);
     return result;
 }
 
@@ -134,14 +132,14 @@ function download() {
 function openFile() {
         var file_to_read = document.getElementById("get_the_file").files[0];
         var fileread = new FileReader();
-        fileread.onload = function(e) {
-          var content = e.target.result;
-          // console.log(content);
-          var intern = JSON.parse(content); // Array of Objects.
-          var intern = JSON.parse(content); // Array of Objects.
-          features = intern;
-          console.log(intern); // You can index every object
+
+        result = fileread.onload = function(e) {
+            var content = e.target.result;
+            var intern = JSON.parse(content);
+            
+            createListFromFile(setFeatureFromJson(intern));
         };
+
         fileread.readAsText(file_to_read);
 }
 
@@ -176,8 +174,16 @@ function setFeaturesParams(features) {
     return updatedFeatures;
 }
 
-function setFeatureFromJson(feature) {
-    
+function setFeatureFromJson(featuresJson) {
+    let newFeatures = [];
+    featuresJson.forEach((feature, index) => {
+        let newFeature = Object.assign(
+            defaultFeature(),
+            feature
+        );
+        newFeatures.push(newFeature);
+    });
+    return newFeatures;
 }
 function createFeature(featureId, featureName, featureWeight, featureType, levelCount) {
     let feature = {
@@ -206,6 +212,47 @@ function createFeature(featureId, featureName, featureWeight, featureType, level
         setLevels(findLevelName) {
             for (i = 0; i < this.levelsCount; i++) {
                 levelName = findLevelName(featureId, i);
+                this.setFeatureLevel(levelName);
+            }
+            return this;
+        },
+        isPositive() {
+            return this.type === "true";
+        },
+        getLevelValue(levelNumber) {
+            return levelNumber * this.levelUnit;
+        }
+    };
+    return feature;
+}
+
+function defaultFeature() {
+    let feature = {
+        id: 0,
+        name: '',
+        weight: 0,
+        type: false,
+        featureRank: 0,
+        levelUnit: 0,
+        levelValue: 0,
+        levelsCount: 0,
+        levels: [],
+        value: 0,
+        setFeatureRank(normalizingCoef) {
+            this.featureRank = normalizingCoef * this.weight;
+            return this;
+        },
+        setLevelUnit() {
+            this.levelUnit = this.featureRank / (this.levelsCount - 1);
+            return this;
+        },
+        setFeatureLevel(levelName) {
+            this.levels.push(levelName);
+            return this;
+        },
+        setLevels(findLevelName) {
+            for (i = 0; i < this.levelsCount; i++) {
+                levelName = findLevelName(this.id, i);
                 this.setFeatureLevel(levelName);
             }
             return this;
