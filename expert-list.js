@@ -77,7 +77,7 @@ function createFeatureValueBlock(features) {
 function createList() {
     hideListCreation();
     showListUsing();
-    getNormalizingCoef(features);
+    // getNormalizingCoef(features);
     features = setFeaturesParams(features);
     createFeatureValueBlock(features);
 }
@@ -136,10 +136,19 @@ function findLevelInputValueForFeature(featureNuber, levelNumber) {
 
 function setFeaturesParams(features) {
     featuresCount = features.length;
-    normalizingCoef = getNormalizingCoef(features);
+    normalizingCoefPositive = getPositiveNormalizingCoef(features);
+    console.log(normalizingCoefPositive);
+
+    normalizingCoefNegative = getNegativeNormalizingCoef(features);
+    console.log(normalizingCoefNegative);
+
     updatedFeatures = features.map(
         function (feature) {
-            return feature.setFeatureRank(normalizingCoef).setLevelUnit().setLevels(findLevelInputValueForFeature);
+            if (feature.isPositive()) {
+                return feature.setFeatureRank(normalizingCoefPositive).setLevelUnit().setLevels(findLevelInputValueForFeature);
+            } else {
+                return feature.setFeatureRank(normalizingCoefNegative).setLevelUnit().setLevels(findLevelInputValueForFeature);
+            }
         }
     );
     return updatedFeatures;
@@ -162,7 +171,7 @@ function createFeature(featureId, featureName, featureWeight, featureType, level
             return this;
         },
         setLevelUnit() {
-            this.levelUnit = this.featureRank / (this.levelsCount);
+            this.levelUnit = this.featureRank / (this.levelsCount - 1);
             return this;
         },
         setFeatureLevel(levelName) {
@@ -190,10 +199,28 @@ function calcNormalizingCoef(weightSum) {
     return 100 / weightSum;
 }
 
-function getNormalizingCoef(features) {
+function getPositiveNormalizingCoef(features) {
     weightSum = features.reduce(
-        function (accumulator, currentValue) {
-            return accumulator + currentValue.weight;
+        function (accumulator, feature) {
+            if (feature.isPositive()) {
+                return accumulator + feature.weight;   
+            } else {
+                return accumulator + 0;
+            }
+        },
+        0
+    );
+    return calcNormalizingCoef(weightSum);
+}
+
+function getNegativeNormalizingCoef(features) {
+    weightSum = features.reduce(
+        function (accumulator, feature) {
+            if (!feature.isPositive()) {
+                return accumulator + feature.weight;   
+            } else {
+                return accumulator + 0;
+            }
         },
         0
     );
