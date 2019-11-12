@@ -123,6 +123,14 @@ function calculateResult() {
     );
 }
 
+function download() {
+    var file = new Blob([JSON.stringify(features)], {type: 'application/jsonjson'});
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(file);
+    a.download = 'features.json';
+    a.click();
+}
+
 function findValueForFeature(featureNuber) {
     let selectId = featureNuber + "featureValue";
     return Number(document.getElementById(selectId).value);
