@@ -10,7 +10,10 @@
             <div style="margin-top: 20px">
                 <button onclick="openFile()">Открыть</button>
             </div>
-            <input type="file" id="get_the_file">
+            <div style="margin-top: 20px">
+                <label for="#get_the_file">Выберите файл</label>
+                <input type="file" id="get_the_file">
+            </div>
             <p>Для добавления признака введите название и количество градаций</p>
             <div>
                 <label for="#feature-name">Название</label>
@@ -39,15 +42,24 @@
                 <button onclick="createList()" style="margin-top: 20px">Готово</button>
             </div>
         </div>
-        <div id="list-using" style="display: none">
-            <h1>Оценочный лист</h1>
-            <div style="margin-top: 20px">
-                <button onclick="calculateResult()">Посчитать</button>
+        <div>
+            <div id="list-controlls" style="display: none">
+                <h1>Оценочный лист</h1>
+                <div style="margin-top: 20px">
+                    <button onclick="calculateResult()">Посчитать</button>
+                </div>
+                <div style="margin-top: 20px">
+                    <button onclick="download()">Скачать</button>
+                </div>
+                <div style="margin-top: 20px">
+                    <button onclick="goEdit()">Редактировать</button>
+                </div>
+                <p>Выберите оценки</p>
             </div>
-            <div style="margin-top: 20px">
-                <button onclick="download()">Скачать</button>
+            
+            <div id="list-using" style="display: none">
+            
             </div>
-            <p>Выберите оценки</p>
         </div>
 
 

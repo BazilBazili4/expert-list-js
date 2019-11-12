@@ -33,14 +33,42 @@ function addInputsForLevels() {
     container.appendChild(feature);     
 }
 
+function removeList() {
+    let listUsingDiv = document.getElementById('list-using');
+    console.log(listUsingDiv);
+    listUsingDiv.removeAttribute("style");
+    listUsingDiv.setAttribute("style", "display: none");
+    listUsingDiv.innerHTML = '';
+}
+
 function hideListCreation() {
     let listCreationDiv = document.getElementById('list-creation');
     listCreationDiv.setAttribute("style", "display: none");
 }
 
+function hideListControlls() {
+    let listCreationDiv = document.getElementById('list-controlls');
+    listCreationDiv.setAttribute("style", "display: none");
+}
+
+function showListCreation() {
+    let listUsingDiv = document.getElementById('list-creation');
+    listUsingDiv.setAttribute("style", "display: block");
+}
+
 function showListUsing() {
     let listUsingDiv = document.getElementById('list-using');
     listUsingDiv.setAttribute("style", "display: block");
+}
+
+function showListControls() {
+    let listUsingDiv = document.getElementById('list-controlls');
+    listUsingDiv.setAttribute("style", "display: block");
+}
+function goEdit() {
+    showListCreation();
+    hideListControlls();
+    removeList();
 }
 
 function createFeatureValueSelect(feature) {
@@ -74,10 +102,12 @@ function createList() {
     showListUsing();
     setFeaturesParams(features);
     createFeatureValueBlock(features);
+    showListControls();
 }
 function createListFromFile(features) {
     hideListCreation();
     showListUsing();
+    showListControls();
     // setFeaturesParams(features);
     createFeatureValueBlock(features);
 }
@@ -298,3 +328,4 @@ function getNegativeNormalizingCoef(features) {
     );
     return calcNormalizingCoef(weightSum);
 }
+
