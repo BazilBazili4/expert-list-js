@@ -78,7 +78,7 @@ function createList() {
     hideListCreation();
     showListUsing();
     // getNormalizingCoef(features);
-    features = setFeaturesParams(features);
+    // features = setFeaturesParams(features);
     createFeatureValueBlock(features);
 }
 
@@ -124,11 +124,25 @@ function calculateResult() {
 }
 
 function download() {
-    var file = new Blob([JSON.stringify(features)], {type: 'application/jsonjson'});
+    var file = new Blob([JSON.stringify(features)], {type: 'application/json'});
     var a = document.createElement("a");
     a.href = URL.createObjectURL(file);
     a.download = 'features.json';
     a.click();
+}
+
+function openFile() {
+        var file_to_read = document.getElementById("get_the_file").files[0];
+        var fileread = new FileReader();
+        fileread.onload = function(e) {
+          var content = e.target.result;
+          // console.log(content);
+          var intern = JSON.parse(content); // Array of Objects.
+          var intern = JSON.parse(content); // Array of Objects.
+          features = intern;
+          console.log(intern); // You can index every object
+        };
+        fileread.readAsText(file_to_read);
 }
 
 function findValueForFeature(featureNuber) {
@@ -162,6 +176,9 @@ function setFeaturesParams(features) {
     return updatedFeatures;
 }
 
+function setFeatureFromJson(feature) {
+    
+}
 function createFeature(featureId, featureName, featureWeight, featureType, levelCount) {
     let feature = {
         id: featureId,
