@@ -23,7 +23,7 @@ function addInputsForLevels() {
     for (i = 0; i < count; i++) {
         let levelInput = document.createElement("input");
         levelInput.setAttribute("id", featureCount + "featureName" + i);
-        levelInput.setAttribute("class", "levelInput");
+        levelInput.setAttribute("class", "form-control levelInput");
         levelInput.required = true;
         feature.appendChild(levelInput);   
     }
@@ -74,6 +74,7 @@ function goEdit() {
 function createFeatureValueSelect(feature) {
     let levelSelect = document.createElement("select");
     levelSelect.setAttribute("id", feature.id + "featureValue");
+    levelSelect.setAttribute("class", "form-control");
 
     feature.levels.forEach((element, index) => {
         let option = document.createElement("option");
